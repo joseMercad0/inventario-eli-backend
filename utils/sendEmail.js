@@ -21,6 +21,11 @@ const sendEmail = async (subject, message, send_to, sent_from, reply_to) => {
     replyTo: reply_to,
     subject: subject,
     html: message,
+    headers: {
+    'X-Priority': '1',
+    'X-MSMail-Priority': 'High',
+    'Importance': 'high'
+     }
    };
    //send email
    transporter.sendMail(options, function (err, info) {
