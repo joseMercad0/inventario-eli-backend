@@ -3,9 +3,14 @@ const History = require("../models/historyModel");
 
 const getHistory = asyncHandler(async (req, res) => {
     const history = await History.find()
-        .populate('user', 'name email') // Para mostrar nombre/email de usuario
-        .populate('product', 'name');   // Para mostrar nombre del producto
+        .populate('user', 'name email') // Muestra usuario
+        .populate('product', 'name');   // Muestra producto
     res.status(200).json(history);
 });
 
-module.exports = { getHistory };
+const clearHistory = async (req, res) => {
+  await History.deleteMany({ user: req.user.id });
+  res.status(200).json({ ok: true, msg: "Historial borrado." });
+};
+
+module.exports = { getHistory ,clearHistory,};
