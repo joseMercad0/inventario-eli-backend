@@ -1,9 +1,10 @@
 const express = require('express');
 const protect = require('../middleWare/authMiddleware');
-const { getHistory, clearHistory } = require('../controllers/historyController');
+const { getHistory, clearHistory , getSalesReport} = require('../controllers/historyController');
 const router = express.Router();
 
 router.get('/', protect, getHistory);
 router.delete('/', protect, clearHistory); 
+router.get('/sales', protect, getSalesReport);
 
 module.exports = router;

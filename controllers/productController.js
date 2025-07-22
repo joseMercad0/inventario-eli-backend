@@ -151,6 +151,14 @@ const updateProduct = asyncHandler(async (req, res) => {
       details: `Producto editado: ${name}`,
    });
 
+   await History.create({
+   product: product._id,
+   action: "venta",
+   user: req.user.id,
+   details: `Se vendieron ${cantidadVendida} unidades. Stock restante: ${product.quantity}`,
+   });
+
+
    res.status(200).json(updatedProduct);
 });
 

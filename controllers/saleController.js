@@ -5,7 +5,7 @@ const Product = require("../models/productModel");
 const registerSale = async (req, res) => {
   const { items } = req.body;
   let total = 0;
-  const saleItems = [];  // <--- ¡DECLÁRALO AQUÍ!
+  const saleItems = [];  
 
   for (const item of items) {
     const product = await Product.findById(item.productId);
@@ -39,15 +39,23 @@ const registerSale = async (req, res) => {
 
 // --- HISTORIAL DE VENTAS ---
 const salesHistory = async (req, res) => {
-  const { from, to } = req.query; // Fechas opcionales para filtro
+  const { from, to } = req.query;
   let filter = {};
-  if (from && to) filter.date = { $gte: new Date(from), $lte: new Date(to) };
+if (from && to) {
+   const fromDate = new Date(from); // "2025-07-16T00:00:00.000Z"
+  const toDate = new Date(to);     // "2025-07-16T00:00:00.000Z"
+  toDate.setHours(23, 59, 59, 999); // <-- Esto lo convierte en "2025-07-16T23:59:59.999Z"
+  filter.date = { $gte: fromDate, $lte: toDate };
+  console.log(fromDate, toDate, filter);
 
-const sales = await Sale.find(filter)
-  .populate("items.product", "name category price") // agrega los campos que quieras
-  .sort("-date");
-res.status(200).json(sales);
+}
 
+
+   const sales = await Sale.find(filter)
+    .populate("items.product", "name category price")
+    .sort("date");
+  res.status(200).json(sales);
+  
 };
 
 // --- BORRAR HISTORIAL DE VENTAS ---

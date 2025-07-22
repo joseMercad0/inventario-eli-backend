@@ -28,10 +28,6 @@ app.use(cors({
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use((req, res, next) => {
-    console.log("REQ ORIGIN:", req.headers.origin);
-    next();
-});
 
 
 //RUTAS MIDDLEWARES 

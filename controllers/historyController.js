@@ -13,4 +13,19 @@ const clearHistory = async (req, res) => {
   res.status(200).json({ ok: true, msg: "Historial borrado." });
 };
 
-module.exports = { getHistory ,clearHistory,};
+const getSalesReport = asyncHandler(async (req, res) => {
+  // Puedes agregar filtros por rango de fechas, usuario, producto, etc.
+  const { from, to } = req.query;
+  const query = { action: "venta" };
+  if (from || to) {
+    query.date = {};
+    if (from) query.date.$gte = new Date(from);
+    if (to) query.date.$lte = new Date(to);
+  }
+  const sales = await History.find(query)
+    .populate('user', 'name email')
+    .populate('product', 'name');
+  res.status(200).json(sales);
+});
+
+module.exports = { getHistory ,clearHistory, getSalesReport};
